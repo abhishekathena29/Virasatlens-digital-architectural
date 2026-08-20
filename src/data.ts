@@ -1073,6 +1073,75 @@ export const MONUMENT_IMAGES: Record<string, MonImage[]> = {
   ],
 }
 
+// ---- Interactive 3D models (embedded from Sketchfab) ----
+
+export interface Model3D {
+  /** The Sketchfab model UID — the long slug at the end of a sketchfab.com/3d-models/... URL. */
+  uid: string
+  title: string
+  author: string
+  /** Shown alongside the credit so viewers aren't misled about what the model actually depicts (e.g. a single detail, a stylised piece, or a replica rather than a full scan). */
+  note?: string
+}
+
+/** Only monuments with a real, verified Sketchfab model are listed here — not every monument has one. */
+export const MONUMENT_MODELS: Record<string, Model3D> = {
+  'jantar-mantar': {
+    uid: '32e11934070c4da698870137a6585f68',
+    title: 'Jantar Mantar',
+    author: 'harshitojha3975',
+  },
+  'amber-fort': {
+    uid: '9c4ae1795b4b471b898ad1bfd51f88c8',
+    title: 'Amber Fort Tower',
+    author: 'kratasz',
+    note: 'A stylised model of one tower, not a full scan of the fort.',
+  },
+  'hawa-mahal': {
+    uid: '47c0ea2a759544729c137d8b86ba5b9a',
+    title: 'The Hawa Mahal "Wall"',
+    author: 'Bickibarick',
+  },
+  'city-palace-jaipur': {
+    uid: '5d35c9fd2c6f4a909b2cdd96628ff379',
+    title: 'Lehariya Gate, City Palace of Jaipur',
+    author: 'doron_altaratz',
+    note: 'One gateway of the palace complex, not the full site.',
+  },
+  mehrangarh: {
+    uid: 'ae262869cb644343b35bd326dec9a3ee',
+    title: 'Mehrangarh Fort, Jodhpur (detail)',
+    author: 'doron_altaratz',
+  },
+  'umaid-bhawan': {
+    uid: 'd95abd21b01b4d5d8cd4cd813c030d04',
+    title: 'Umaid Bhawan Palace',
+    author: 'Srikanth_Nani',
+  },
+  chittorgarh: {
+    uid: 'a6219e07d0a14bccb21a955349bf6153',
+    title: 'Chittorgarh Fort, India',
+    author: 'thx-1',
+    note: 'A terrain reconstruction from satellite data, showing the fort’s hilltop footprint rather than architectural detail.',
+  },
+  'jaisalmer-fort': {
+    uid: '6561fb4f292741d29c972aa7f69be30f',
+    title: 'Jaisalmer Fort Replica',
+    author: 'raobott',
+    note: 'A carved stone replica model of the fort, not a scan of the real site.',
+  },
+  'patwon-ki-haveli': {
+    uid: 'aee148fff9544a248e330f861bd27351',
+    title: 'Patwon Haveli, Jaisalmer',
+    author: 'bryanwhitney',
+  },
+  'chand-baori': {
+    uid: '0fec124478454f74be29a9bd3e5534b8',
+    title: 'Chand Baori',
+    author: 'siddharthbandhu',
+  },
+}
+
 // ---- Comparative module: Traditional vs Modern ----
 
 export interface CompareMetric {

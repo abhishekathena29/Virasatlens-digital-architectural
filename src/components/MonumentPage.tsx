@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { LENS_META, MONUMENTS, availableLenses, byId, lensText, type LensKey, type Monument } from '../data'
+import { LENS_META, MONUMENTS, MONUMENT_MODELS, availableLenses, byId, lensText, type LensKey, type Monument } from '../data'
 import { navigate } from '../useRoute'
 import Simulation from './Simulation'
 import MonumentArt from './MonumentArt'
+import Model3D from './Model3D'
 
 const DIMS: { key: keyof import('../data').Monument['dims']; label: string; icon: string }[] = [
   { key: 'history', label: 'History', icon: '📜' },
@@ -74,6 +75,14 @@ export default function MonumentPage({ id }: { id: string }) {
         </p>
         <MonumentArt monument={m} key={m.id} />
       </section>
+
+      {/* Interactive 3D model, where a real one exists */}
+      {MONUMENT_MODELS[m.id] && (
+        <section className="mon-block">
+          <h2>Walk around it in 3D</h2>
+          <Model3D model={MONUMENT_MODELS[m.id]} key={m.id} />
+        </section>
+      )}
 
       {/* Full six-dimension data */}
       <section className="mon-block">
