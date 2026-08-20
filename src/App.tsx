@@ -1,9 +1,13 @@
+import { useRef } from 'react'
 import { MONUMENTS } from './data'
 import { navigate, useRoute } from './useRoute'
 import HeritageMap from './components/HeritageMap'
 import ExplorePage from './components/ExplorePage'
 import MonumentPage from './components/MonumentPage'
 import Compare from './components/Compare'
+import Counter from './components/Counter'
+import HeroFlow from './components/HeroFlow'
+import { useReveal } from './useReveal'
 import './App.css'
 
 function App() {
@@ -44,6 +48,10 @@ function App() {
 }
 
 function Home() {
+  const { ref: mapRef, visible: mapVisible } = useReveal<HTMLElement>()
+  const { ref: compareRef, visible: compareVisible } = useReveal<HTMLElement>()
+  const { ref: aboutRef, visible: aboutVisible } = useReveal<HTMLElement>()
+
   return (
     <>
       {/* Hero */}
@@ -69,28 +77,30 @@ function Home() {
           </div>
           <div className="hero-stats">
             <div>
-              <strong>{MONUMENTS.length}</strong>
+              <strong>
+                <Counter to={MONUMENTS.length} start />
+              </strong>
               <span>monuments</span>
             </div>
             <div>
-              <strong>6</strong>
+              <strong>
+                <Counter to={6} start />
+              </strong>
               <span>dimensions each</span>
             </div>
             <div>
-              <strong>8</strong>
+              <strong>
+                <Counter to={8} start />
+              </strong>
               <span>live simulations</span>
             </div>
           </div>
         </div>
-        <div className="hero-art" aria-hidden>
-          <div className="arch-frame">
-            <div className="jaali" />
-          </div>
-        </div>
+        <HeroArt />
       </section>
 
       {/* Map */}
-      <section id="map" className="section">
+      <section id="map" className={`section reveal ${mapVisible ? 'reveal-in' : ''}`} ref={mapRef}>
         <div className="section-head">
           <h2>Interactive heritage map</h2>
           <p>
@@ -102,7 +112,11 @@ function Home() {
       </section>
 
       {/* Compare */}
-      <section id="compare" className="section section-alt">
+      <section
+        id="compare"
+        className={`section section-alt reveal ${compareVisible ? 'reveal-in' : ''}`}
+        ref={compareRef}
+      >
         <div className="section-head">
           <h2>Traditional vs modern</h2>
           <p>
@@ -114,29 +128,55 @@ function Home() {
       </section>
 
       {/* About */}
-      <section id="about" className="section about">
+      <section id="about" className={`section about reveal ${aboutVisible ? 'reveal-in' : ''}`} ref={aboutRef}>
         <div className="section-head">
           <h2>Why this matters</h2>
         </div>
         <div className="about-grid">
-          <article>
-            <span className="about-ico">📐</span>
-            <h3>Science made simple</h3>
-            <p>Thermodynamics, airflow and passive design explained through buildings you can see.</p>
-          </article>
-          <article>
-            <span className="about-ico">🎓</span>
-            <h3>For students &amp; designers</h3>
-            <p>Each element is paired with the physical principle that makes it work.</p>
-          </article>
-          <article>
-            <span className="about-ico">🌿</span>
-            <h3>Heritage → sustainability</h3>
-            <p>Centuries-old climate wisdom, reframed for a warming world.</p>
-          </article>
+          {[
+            { ico: '📐', title: 'Science made simple', body: 'Thermodynamics, airflow and passive design explained through buildings you can see.' },
+            { ico: '🎓', title: 'For students & designers', body: 'Each element is paired with the physical principle that makes it work.' },
+            { ico: '🌿', title: 'Heritage → sustainability', body: 'Centuries-old climate wisdom, reframed for a warming world.' },
+          ].map((card, i) => (
+            <article key={card.title} style={{ transitionDelay: `${i * 90}ms` }}>
+              <span className="about-ico" aria-hidden>
+                {card.ico}
+              </span>
+              <h3>{card.title}</h3>
+              <p>{card.body}</p>
+            </article>
+          ))}
         </div>
       </section>
     </>
+  )
+}
+
+/** The hero's arch: a live airflow simulation behind the jaali, tilting gently toward the cursor. */
+function HeroArt() {
+  const frameRef = useRef<HTMLDivElement>(null)
+
+  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = frameRef.current
+    if (!el) return
+    const r = el.getBoundingClientRect()
+    const px = (e.clientX - r.left) / r.width - 0.5
+    const py = (e.clientY - r.top) / r.height - 0.5
+    el.style.transform = `perspective(700px) rotateY(${px * 14}deg) rotateX(${-py * 14}deg)`
+  }
+  const onLeave = () => {
+    const el = frameRef.current
+    if (!el) return
+    el.style.transform = 'perspective(700px) rotateY(0deg) rotateX(0deg)'
+  }
+
+  return (
+    <div className="hero-art">
+      <div className="arch-frame" ref={frameRef} onMouseMove={onMove} onMouseLeave={onLeave}>
+        <HeroFlow />
+        <div className="jaali" />
+      </div>
+    </div>
   )
 }
 

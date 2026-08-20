@@ -64,6 +64,14 @@ export default function MonumentPage({ id }: { id: string }) {
         </div>
       </header>
 
+      {/* Interactive 3D model, where a real one exists */}
+      {MONUMENT_MODELS[m.id] && (
+        <section className="mon-block">
+          <h2>Walk around it in 3D</h2>
+          <Model3D model={MONUMENT_MODELS[m.id]} key={m.id} />
+        </section>
+      )}
+
       {/* Interactive Design Lens */}
       <DesignLensSection monument={m} key={m.id} />
 
@@ -75,14 +83,6 @@ export default function MonumentPage({ id }: { id: string }) {
         </p>
         <MonumentArt monument={m} key={m.id} />
       </section>
-
-      {/* Interactive 3D model, where a real one exists */}
-      {MONUMENT_MODELS[m.id] && (
-        <section className="mon-block">
-          <h2>Walk around it in 3D</h2>
-          <Model3D model={MONUMENT_MODELS[m.id]} key={m.id} />
-        </section>
-      )}
 
       {/* Full six-dimension data */}
       <section className="mon-block">
